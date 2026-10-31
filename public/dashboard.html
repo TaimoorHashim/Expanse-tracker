@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Family Expense & Debt Tracker</title>
+  <meta name="description" content="Manage family finances, track daily expenses, log money received, and track personal debts and repayments.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Navbar -->
+    <header class="app-navbar">
+      <div class="nav-brand">
+        <div class="nav-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <span class="nav-brand-title">Family Tracker</span>
+      </div>
+
+      <div class="nav-actions">
+        <div class="user-badge">
+          <span>Signed in as:</span>
+          <span id="user-email-display">Loading...</span>
+        </div>
+        <button id="btn-export-excel" class="btn btn-secondary btn-sm" title="Export financial records to Excel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export Excel
+        </button>
+        <button id="btn-logout" class="btn btn-danger btn-sm" title="Log out of your account">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Filter / Action Bar -->
+      <section class="controls-bar">
+        <div class="month-selector-group">
+          <label for="filter-month">Selected Month:</label>
+          <input type="month" id="filter-month" class="month-input">
+        </div>
+
+        <div class="action-buttons-group">
+          <button id="btn-open-budget-modal" class="btn btn-secondary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Set Budget
+          </button>
+          <button id="btn-open-expense-modal" class="btn btn-danger btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Expense
+          </button>
+          <button id="btn-open-income-modal" class="btn btn-success btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Money Received
+          </button>
+          <button id="btn-open-debt-modal" class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Debt
+          </button>
+        </div>
+      </section>
+
+      <!-- Metrics KPI Overview Grid -->
+      <section class="metrics-grid">
+        <!-- Monthly Budget -->
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="metric-title">Monthly Budget</span>
+            <div class="metric-icon-box" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v12M15 9.5H9.5a2.5 2.5 0 0 0 0 5h5a2.5 2.5 0 0 1 0 5H8"></path></svg>
+            </div>
+          </div>
+          <div class="metric-val" id="kpi-budget">$0.00</div>
+          <div class="metric-sub" id="kpi-budget-sub">Click 'Set Budget' to adjust</div>
+        </div>
+
+        <!-- Total Spent / Expenses -->
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="metric-title">Total Expenses</span>
+            <div class="metric-icon-box" style="background: rgba(244, 63, 94, 0.15); color: #fb7185;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+            </div>
+          </div>
+          <div class="metric-val" id="kpi-expenses">$0.00</div>
+          <div class="metric-sub" id="kpi-expenses-sub">0 transactions recorded</div>
+          <div class="metric-progress-bg">
+            <div id="kpi-budget-progress" class="metric-progress-bar" style="width: 0%; background: #6366f1;"></div>
+          </div>
+        </div>
+
+        <!-- Remaining Budget / Net Savings -->
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="metric-title">Remaining Budget</span>
+            <div class="metric-icon-box" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+          </div>
+          <div class="metric-val" id="kpi-remaining">$0.00</div>
+          <div class="metric-sub" id="kpi-remaining-sub">Budget balance for this month</div>
+        </div>
+
+        <!-- Money Received & Net Balance -->
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="metric-title">Income Received</span>
+            <div class="metric-icon-box" style="background: rgba(6, 182, 212, 0.15); color: #22d3ee;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            </div>
+          </div>
+          <div class="metric-val" id="kpi-income">$0.00</div>
+          <div class="metric-sub" id="kpi-income-sub">Net Savings: $0.00</div>
+        </div>
+
+        <!-- Debts Position -->
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span class="metric-title">Debts Position</span>
+            <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+          </div>
+          <div class="metric-val" id="kpi-debts-owed">$0.00</div>
+          <div class="metric-sub" id="kpi-debts-sub">I Owe: $0.00 | Owed To Me: $0.00</div>
+        </div>
+      </section>
+
+      <!-- Navigation Tabs -->
+      <nav class="tabs-navigation">
+        <button class="tab-btn active" data-tab="tab-expenses">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline></svg>
+          Expenses
+        </button>
+        <button class="tab-btn" data-tab="tab-income">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          Money Received
+        </button>
+        <button class="tab-btn" data-tab="tab-debts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          Debts & Loans
+        </button>
+        <button class="tab-btn" data-tab="tab-analytics">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Monthly Analytics
+        </button>
+      </nav>
+
+      <!-- Tab: Expenses -->
+      <section id="tab-expenses" class="tab-content active">
+        <div class="section-header">
+          <h2 class="section-title">Expense Records</h2>
+          <span id="expenses-count-badge" class="badge badge-expense">0 items</span>
+        </div>
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body">
+                <tr><td colspan="5" class="empty-state">Loading expenses...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab: Money Received -->
+      <section id="tab-income" class="tab-content">
+        <div class="section-header">
+          <h2 class="section-title">Income & Money Received</h2>
+          <span id="income-count-badge" class="badge badge-income">0 items</span>
+        </div>
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Source</th>
+                  <th>Note</th>
+                  <th>Amount</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="income-table-body">
+                <tr><td colspan="5" class="empty-state">Loading money received...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab: Debts -->
+      <section id="tab-debts" class="tab-content">
+        <div class="section-header">
+          <h2 class="section-title">Debts & Loans Management</h2>
+          <span id="debts-count-badge" class="badge badge-debt-owed">0 items</span>
+        </div>
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Person</th>
+                  <th>Direction</th>
+                  <th>Principal</th>
+                  <th>Repaid</th>
+                  <th>Balance Remaining</th>
+                  <th>Due Date</th>
+                  <th>Note</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="debts-table-body">
+                <tr><td colspan="8" class="empty-state">Loading debts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab: Analytics -->
+      <section id="tab-analytics" class="tab-content">
+        <div class="section-header">
+          <h2 class="section-title">Monthly Expense Breakdown</h2>
+        </div>
+        <div class="table-card" style="padding: 24px;">
+          <div id="analytics-categories-container">
+            <div class="empty-state">No expense breakdown data available for this month.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Set Budget -->
+  <div id="modal-budget" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Set Monthly Budget</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-budget">
+        <div class="form-group">
+          <label for="budget-month">Target Month</label>
+          <input type="month" id="budget-month" class="input-control" required>
+        </div>
+        <div class="form-group">
+          <label for="budget-amount">Budget Amount ($)</label>
+          <input type="number" step="0.01" min="0" id="budget-amount" class="input-control" placeholder="1500.00" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Budget</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Expense (Add / Edit) -->
+  <div id="modal-expense" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-expense-title" class="modal-title">Add Expense</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-expense">
+        <input type="hidden" id="expense-id">
+        <div class="form-group">
+          <label for="expense-date">Date</label>
+          <input type="date" id="expense-date" class="input-control" required>
+        </div>
+        <div class="form-group">
+          <label for="expense-category">Category</label>
+          <input type="text" id="expense-category" class="input-control" placeholder="Groceries, Utilities, Rent, Health..." required>
+        </div>
+        <div class="form-group">
+          <label for="expense-amount">Amount ($)</label>
+          <input type="number" step="0.01" min="0.01" id="expense-amount" class="input-control" placeholder="45.50" required>
+        </div>
+        <div class="form-group">
+          <label for="expense-desc">Description (Optional)</label>
+          <input type="text" id="expense-desc" class="input-control" placeholder="Weekly supermarket run">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Money Received (Add / Edit) -->
+  <div id="modal-income" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-income-title" class="modal-title">Add Money Received</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-income">
+        <input type="hidden" id="income-id">
+        <div class="form-group">
+          <label for="income-date">Date</label>
+          <input type="date" id="income-date" class="input-control" required>
+        </div>
+        <div class="form-group">
+          <label for="income-source">Source</label>
+          <input type="text" id="income-source" class="input-control" placeholder="Salary, Freelance, Gift, Refund..." required>
+        </div>
+        <div class="form-group">
+          <label for="income-amount">Amount ($)</label>
+          <input type="number" step="0.01" min="0.01" id="income-amount" class="input-control" placeholder="2000.00" required>
+        </div>
+        <div class="form-group">
+          <label for="income-note">Note (Optional)</label>
+          <input type="text" id="income-note" class="input-control" placeholder="Monthly paycheck deposit">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Debt (Add / Edit) -->
+  <div id="modal-debt" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-debt-title" class="modal-title">Add Debt</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-debt">
+        <input type="hidden" id="debt-id">
+        <div class="form-group">
+          <label for="debt-person">Person Name</label>
+          <input type="text" id="debt-person" class="input-control" placeholder="e.g. John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="debt-direction">Direction</label>
+          <select id="debt-direction" class="input-control" required>
+            <option value="I_OWE">I Owe (Borrowing money)</option>
+            <option value="OWED_TO_ME">Owed To Me (Lent money)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="debt-principal">Principal Amount ($)</label>
+          <input type="number" step="0.01" min="0.01" id="debt-principal" class="input-control" placeholder="500.00" required>
+        </div>
+        <div class="form-group">
+          <label for="debt-date">Debt Date</label>
+          <input type="date" id="debt-date" class="input-control" required>
+        </div>
+        <div class="form-group">
+          <label for="debt-due-date">Due Date (Optional)</label>
+          <input type="date" id="debt-due-date" class="input-control">
+        </div>
+        <div class="form-group">
+          <label for="debt-note">Note (Optional)</label>
+          <input type="text" id="debt-note" class="input-control" placeholder="Car repair loan">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Debt</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Debt Repayment -->
+  <div id="modal-repayment" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-repayment-title" class="modal-title">Record Repayment</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-repayment">
+        <input type="hidden" id="repayment-debt-id">
+        <div class="form-group">
+          <label>Debt Reference</label>
+          <div id="repayment-debt-info" style="color: var(--text-muted); font-size: 0.9rem; padding: 6px 0;"></div>
+        </div>
+        <div class="form-group">
+          <label for="repayment-date">Repayment Date</label>
+          <input type="date" id="repayment-date" class="input-control" required>
+        </div>
+        <div class="form-group">
+          <label for="repayment-amount">Amount ($)</label>
+          <input type="number" step="0.01" min="0.01" id="repayment-amount" class="input-control" placeholder="100.00" required>
+        </div>
+        <div class="form-group">
+          <label for="repayment-note">Note (Optional)</label>
+          <input type="text" id="repayment-note" class="input-control" placeholder="Bank transfer payment">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Record Repayment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
