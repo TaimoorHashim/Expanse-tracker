@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
       { header: 'Date', key: 'expense_date', width: 14 },
       { header: 'Category', key: 'category', width: 20 },
       { header: 'Description', key: 'description', width: 35 },
-      { header: 'Amount ($)', key: 'amount', width: 15 }
+      { header: 'Amount (PKR)', key: 'amount', width: 16 }
     ];
 
     const [expenses] = await pool.query(
@@ -46,7 +46,7 @@ router.get('/', async (req, res, next) => {
       { header: 'Date', key: 'received_date', width: 14 },
       { header: 'Source', key: 'source', width: 25 },
       { header: 'Note', key: 'note', width: 35 },
-      { header: 'Amount ($)', key: 'amount', width: 15 }
+      { header: 'Amount (PKR)', key: 'amount', width: 16 }
     ];
 
     const [income] = await pool.query(
@@ -68,9 +68,9 @@ router.get('/', async (req, res, next) => {
     debtsSheet.columns = [
       { header: 'Person', key: 'person_name', width: 25 },
       { header: 'Direction', key: 'direction', width: 16 },
-      { header: 'Principal ($)', key: 'principal', width: 16 },
-      { header: 'Total Repaid ($)', key: 'total_repaid', width: 16 },
-      { header: 'Remaining ($)', key: 'remaining_balance', width: 16 },
+      { header: 'Principal (PKR)', key: 'principal', width: 16 },
+      { header: 'Total Repaid (PKR)', key: 'total_repaid', width: 16 },
+      { header: 'Remaining (PKR)', key: 'remaining_balance', width: 16 },
       { header: 'Debt Date', key: 'debt_date', width: 14 },
       { header: 'Due Date', key: 'due_date', width: 14 },
       { header: 'Note', key: 'note', width: 35 }

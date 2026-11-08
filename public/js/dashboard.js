@@ -341,10 +341,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const repaymentAmountInput = document.getElementById('repayment-amount');
   const repaymentNoteInput = document.getElementById('repayment-note');
 
+  // Currency formatting helper
+  function formatPKR(val) {
+    const num = parseFloat(val) || 0;
+    return `PKR ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
   window.openRepaymentModal = function(debtId, personName, direction, remaining) {
     repaymentDebtIdInput.value = debtId;
     const dirText = direction === 'I_OWE' ? 'You owe' : 'Owed to you';
-    repaymentDebtInfo.textContent = `${personName} (${dirText}) — Remaining: $${parseFloat(remaining).toFixed(2)}`;
+    repaymentDebtInfo.textContent = `${personName} (${dirText}) — Remaining: ${formatPKR(remaining)}`;
     repaymentDateInput.value = new Date().toISOString().slice(0, 10);
     repaymentAmountInput.value = '';
     repaymentNoteInput.value = '';
@@ -395,11 +401,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const netSavings = parseFloat(summary.netSavings) || 0;
 
       // Budget KPI
-      document.getElementById('kpi-budget').textContent = `$${budget.toFixed(2)}`;
+      document.getElementById('kpi-budget').textContent = formatPKR(budget);
       document.getElementById('kpi-budget-sub').textContent = budget > 0 ? 'Allocated monthly budget' : 'No budget set for this month';
 
       // Expenses KPI
-      document.getElementById('kpi-expenses').textContent = `$${totalExpenses.toFixed(2)}`;
+      document.getElementById('kpi-expenses').textContent = formatPKR(totalExpenses);
       document.getElementById('kpi-expenses-sub').textContent = `${summary.expenseCount} transactions recorded`;
 
       // Progress bar
@@ -414,22 +420,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Remaining Budget KPI
       const kpiRemaining = document.getElementById('kpi-remaining');
-      kpiRemaining.textContent = `$${remainingBudget.toFixed(2)}`;
+      kpiRemaining.textContent = formatPKR(remainingBudget);
       kpiRemaining.style.color = remainingBudget < 0 ? '#fb7185' : '#34d399';
       document.getElementById('kpi-remaining-sub').textContent = remainingBudget < 0 ? 'Over budget!' : 'Available balance';
 
       // Income KPI
-      document.getElementById('kpi-income').textContent = `$${totalReceived.toFixed(2)}`;
-      document.getElementById('kpi-income-sub').textContent = `Net Savings: $${netSavings.toFixed(2)}`;
+      document.getElementById('kpi-income').textContent = formatPKR(totalReceived);
+      document.getElementById('kpi-income-sub').textContent = `Net Savings: ${formatPKR(netSavings)}`;
 
       // Debts KPI
       const iOwe = parseFloat(summary.debts.totalIOwe) || 0;
       const owedToMe = parseFloat(summary.debts.totalOwedToMe) || 0;
       const netDebt = owedToMe - iOwe;
       const kpiDebts = document.getElementById('kpi-debts-owed');
-      kpiDebts.textContent = `${netDebt >= 0 ? '+' : ''}$${netDebt.toFixed(2)}`;
+      kpiDebts.textContent = `${netDebt < 0 ? '-' : (netDebt > 0 ? '+' : '')}${formatPKR(Math.abs(netDebt))}`;
       kpiDebts.style.color = netDebt >= 0 ? '#34d399' : '#fb7185';
-      document.getElementById('kpi-debts-sub').textContent = `I Owe: $${iOwe.toFixed(2)} | Owed To Me: $${owedToMe.toFixed(2)}`;
+      document.getElementById('kpi-debts-sub').textContent = `I Owe: ${formatPKR(iOwe)} | Owed To Me: ${formatPKR(owedToMe)}`;
 
       // Render Categories Analytics
       renderCategoriesAnalytics(summary.categoryBreakdown || [], totalExpenses);
@@ -458,7 +464,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td><strong>${exp.expense_date.slice(0, 10)}</strong></td>
             <td><span class="badge badge-expense">${escapeHtml(exp.category)}</span></td>
             <td>${exp.description ? escapeHtml(exp.description) : '<span style="color:var(--text-dim)">-</span>'}</td>
-            <td style="font-weight: 700; color: #fb7185;">$${parseFloat(exp.amount).toFixed(2)}</td>
+            <td style="font-weight: 700; color: #fb7185;">${formatPKR(exp.amount)}</td>
             <td style="text-align: right;">
               <button class="btn btn-secondary btn-sm" onclick="editExpense(${expJson})" style="margin-right: 6px;">Edit</button>
               <button class="btn btn-danger btn-sm" onclick="deleteExpense(${exp.id})">Delete</button>
@@ -491,7 +497,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td><strong>${inc.received_date.slice(0, 10)}</strong></td>
             <td><span class="badge badge-income">${escapeHtml(inc.source)}</span></td>
             <td>${inc.note ? escapeHtml(inc.note) : '<span style="color:var(--text-dim)">-</span>'}</td>
-            <td style="font-weight: 700; color: #34d399;">$${parseFloat(inc.amount).toFixed(2)}</td>
+            <td style="font-weight: 700; color: #34d399;">${formatPKR(inc.amount)}</td>
             <td style="text-align: right;">
               <button class="btn btn-secondary btn-sm" onclick="editIncome(${incJson})" style="margin-right: 6px;">Edit</button>
               <button class="btn btn-danger btn-sm" onclick="deleteIncome(${inc.id})">Delete</button>
@@ -530,10 +536,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           <tr>
             <td><strong>${escapeHtml(d.person_name)}</strong></td>
             <td>${dirBadge}</td>
-            <td>$${parseFloat(d.principal).toFixed(2)}</td>
-            <td style="color: #34d399;">$${parseFloat(d.total_repaid).toFixed(2)}</td>
+            <td>${formatPKR(d.principal)}</td>
+            <td style="color: #34d399;">${formatPKR(d.total_repaid)}</td>
             <td style="font-weight: 700; color: ${isPaid ? '#34d399' : (isIOwe ? '#fb7185' : '#60a5fa')}">
-              ${isPaid ? '<span class="badge badge-income">Paid Off</span>' : `$${rem.toFixed(2)}`}
+              ${isPaid ? '<span class="badge badge-income">Paid Off</span>' : formatPKR(rem)}
             </td>
             <td>${d.due_date ? d.due_date.slice(0, 10) : '<span style="color:var(--text-dim)">N/A</span>'}</td>
             <td>${d.note ? escapeHtml(d.note) : '<span style="color:var(--text-dim)">-</span>'}</td>
@@ -564,7 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
               <span style="font-weight: 600; color: #ffffff;">${escapeHtml(cat.category)}</span>
-              <span style="color: var(--text-muted);">$${cat.total} (${cat.percentage}%)</span>
+              <span style="color: var(--text-muted);">${formatPKR(cat.total)} (${cat.percentage}%)</span>
             </div>
             <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden;">
               <div style="width: ${cat.percentage}%; height: 100%; background: linear-gradient(90deg, #6366f1, #a855f7); border-radius: 999px;"></div>

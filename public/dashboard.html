@@ -14,7 +14,7 @@
       <div class="nav-brand">
         <div class="nav-logo-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
           </svg>
         </div>
         <span class="nav-brand-title">Family Tracker</span>
@@ -45,21 +45,21 @@
         </div>
 
         <div class="action-buttons-group">
-          <button id="btn-open-budget-modal" class="btn btn-secondary btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            Set Budget
+          <button id="btn-open-budget-modal" class="btn btn-secondary btn-sm" title="Adjust monthly budget">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <span>Set Budget</span>
           </button>
-          <button id="btn-open-expense-modal" class="btn btn-danger btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Add Expense
+          <button id="btn-open-expense-modal" class="btn btn-danger btn-sm" title="Record an expense transaction">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add Expense</span>
           </button>
-          <button id="btn-open-income-modal" class="btn btn-success btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Add Money Received
+          <button id="btn-open-income-modal" class="btn btn-success btn-sm" title="Record money received or income">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add Money Received</span>
           </button>
-          <button id="btn-open-debt-modal" class="btn btn-primary btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Add Debt
+          <button id="btn-open-debt-modal" class="btn btn-purple btn-sm" title="Record a personal debt or loan">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add Debt</span>
           </button>
         </div>
       </section>
@@ -71,10 +71,10 @@
           <div class="metric-card-header">
             <span class="metric-title">Monthly Budget</span>
             <div class="metric-icon-box" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v12M15 9.5H9.5a2.5 2.5 0 0 0 0 5h5a2.5 2.5 0 0 1 0 5H8"></path></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
             </div>
           </div>
-          <div class="metric-val" id="kpi-budget">$0.00</div>
+          <div class="metric-val" id="kpi-budget">PKR 0.00</div>
           <div class="metric-sub" id="kpi-budget-sub">Click 'Set Budget' to adjust</div>
         </div>
 
@@ -86,7 +86,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
             </div>
           </div>
-          <div class="metric-val" id="kpi-expenses">$0.00</div>
+          <div class="metric-val" id="kpi-expenses">PKR 0.00</div>
           <div class="metric-sub" id="kpi-expenses-sub">0 transactions recorded</div>
           <div class="metric-progress-bg">
             <div id="kpi-budget-progress" class="metric-progress-bar" style="width: 0%; background: #6366f1;"></div>
@@ -101,7 +101,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             </div>
           </div>
-          <div class="metric-val" id="kpi-remaining">$0.00</div>
+          <div class="metric-val" id="kpi-remaining">PKR 0.00</div>
           <div class="metric-sub" id="kpi-remaining-sub">Budget balance for this month</div>
         </div>
 
@@ -113,8 +113,8 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
             </div>
           </div>
-          <div class="metric-val" id="kpi-income">$0.00</div>
-          <div class="metric-sub" id="kpi-income-sub">Net Savings: $0.00</div>
+          <div class="metric-val" id="kpi-income">PKR 0.00</div>
+          <div class="metric-sub" id="kpi-income-sub">Net Savings: PKR 0.00</div>
         </div>
 
         <!-- Debts Position -->
@@ -125,8 +125,8 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
           </div>
-          <div class="metric-val" id="kpi-debts-owed">$0.00</div>
-          <div class="metric-sub" id="kpi-debts-sub">I Owe: $0.00 | Owed To Me: $0.00</div>
+          <div class="metric-val" id="kpi-debts-owed">PKR 0.00</div>
+          <div class="metric-sub" id="kpi-debts-sub">I Owe: PKR 0.00 | Owed To Me: PKR 0.00</div>
         </div>
       </section>
 
@@ -258,8 +258,8 @@
           <input type="month" id="budget-month" class="input-control" required>
         </div>
         <div class="form-group">
-          <label for="budget-amount">Budget Amount ($)</label>
-          <input type="number" step="0.01" min="0" id="budget-amount" class="input-control" placeholder="1500.00" required>
+          <label for="budget-amount">Budget Amount (PKR)</label>
+          <input type="number" step="0.01" min="0" id="budget-amount" class="input-control" placeholder="50000.00" required>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
@@ -287,8 +287,8 @@
           <input type="text" id="expense-category" class="input-control" placeholder="Groceries, Utilities, Rent, Health..." required>
         </div>
         <div class="form-group">
-          <label for="expense-amount">Amount ($)</label>
-          <input type="number" step="0.01" min="0.01" id="expense-amount" class="input-control" placeholder="45.50" required>
+          <label for="expense-amount">Amount (PKR)</label>
+          <input type="number" step="0.01" min="0.01" id="expense-amount" class="input-control" placeholder="1500.00" required>
         </div>
         <div class="form-group">
           <label for="expense-desc">Description (Optional)</label>
@@ -320,8 +320,8 @@
           <input type="text" id="income-source" class="input-control" placeholder="Salary, Freelance, Gift, Refund..." required>
         </div>
         <div class="form-group">
-          <label for="income-amount">Amount ($)</label>
-          <input type="number" step="0.01" min="0.01" id="income-amount" class="input-control" placeholder="2000.00" required>
+          <label for="income-amount">Amount (PKR)</label>
+          <input type="number" step="0.01" min="0.01" id="income-amount" class="input-control" placeholder="100000.00" required>
         </div>
         <div class="form-group">
           <label for="income-note">Note (Optional)</label>
@@ -356,8 +356,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="debt-principal">Principal Amount ($)</label>
-          <input type="number" step="0.01" min="0.01" id="debt-principal" class="input-control" placeholder="500.00" required>
+          <label for="debt-principal">Principal Amount (PKR)</label>
+          <input type="number" step="0.01" min="0.01" id="debt-principal" class="input-control" placeholder="25000.00" required>
         </div>
         <div class="form-group">
           <label for="debt-date">Debt Date</label>
@@ -397,8 +397,8 @@
           <input type="date" id="repayment-date" class="input-control" required>
         </div>
         <div class="form-group">
-          <label for="repayment-amount">Amount ($)</label>
-          <input type="number" step="0.01" min="0.01" id="repayment-amount" class="input-control" placeholder="100.00" required>
+          <label for="repayment-amount">Amount (PKR)</label>
+          <input type="number" step="0.01" min="0.01" id="repayment-amount" class="input-control" placeholder="5000.00" required>
         </div>
         <div class="form-group">
           <label for="repayment-note">Note (Optional)</label>
